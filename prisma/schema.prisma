@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Ticket {
+  id               String          @id @default(uuid())
+  title            String?         @db.VarChar(255)
+  description      String?         @db.Text
+  // status          TicketStatus?   @default(todo)
+  ticket_status_id String?
+  point            Int?
+  created_at       DateTime        @default(now())
+  updated_at       DateTime        @updatedAt
+  deleted_at       DateTime?
+  user_id          String
+  assignee_id      String
+  ticketHistories  TicketHistory[]
+  status           TicketStatus?   @relation(fields: [ticket_status_id], references: [id])
+
+  @@map("tickets")
+}
+
+model TicketHistory {
+  id         String    @id @default(uuid())
+  title      String?   @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  ticket_id  String
+  user_id    String?
+  ticket     Ticket    @relation(fields: [ticket_id], references: [id])
+
+  @@map("ticket_histories")
+}
+
+model TicketStatus {
+  id         String    @id @default(uuid())
+  title      String?   @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  sequence   Int?
+  tickets    Ticket[]
+
+  @@map("ticket_statuses")
+}
+
+// enum TicketStatus {
+//   todo
+//   in_progress
+//   in_review
+//   done
+// }
