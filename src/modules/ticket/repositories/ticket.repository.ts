@@ -271,7 +271,7 @@ export class TicketRepository {
       id: ticket.id,
       date,
       title: ticket.title,
-      user: 'dummy',
+      user: ticket.user_id,
     };
   }
 }

@@ -22,7 +22,7 @@ export class TicketDetailResponseDto {
   status?: string;
   point: number;
   userId?: string;
-  assignee: AssigneeUserTicketDetailDto;
+  assignee: AssigneeUserTicketDetailDto | string;
   ticketHistories?: TicketHistoryDto[];
 }
 

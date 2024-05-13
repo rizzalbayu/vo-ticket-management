@@ -12,18 +12,22 @@ export class UserManagementService {
   private readonly userServiceUrl = this.configService.get('USER_SERVICE_URL');
 
   async getDetailUser(userId: string) {
-    const response = this.http
-      .get(`${this.userServiceUrl}/v1/users/${userId}`)
-      .pipe(
-        catchError((error) => {
-          console.log(error);
-          throw new HttpException(
-            'Error getting user details',
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
-        }),
-      );
-    const { data } = await firstValueFrom(response);
-    return data.data;
+    try {
+      const response = this.http
+        .get(`${this.userServiceUrl}/v1/users/${userId}`)
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            throw new HttpException(
+              'Error getting user details',
+              HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+          }),
+        );
+      const { data } = await firstValueFrom(response);
+      return data.data;
+    } catch (error) {
+      return null;
+    }
   }
 }

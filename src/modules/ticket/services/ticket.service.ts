@@ -1,5 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TicketModel, TicketPaginationModel } from '../models/ticket.model';
+import {
+  TicketHistoryModel,
+  TicketModel,
+  TicketPaginationModel,
+} from '../models/ticket.model';
 import { TicketRepository } from '../repositories/ticket.repository';
 import {
   AssigneeTicketPerformanceQueryDto,
@@ -17,6 +21,7 @@ import { UserManagementService } from '../../../shared/adapters/user-management/
 import {
   AssigneeUserTicketDetailDto,
   TicketDetailResponseDto,
+  TicketHistoryDto,
   TicketPaginationDto,
   TicketPerformanceResponseDto,
   TicketSummaryResponseDto,
@@ -172,10 +177,7 @@ export class TicketService {
       : null;
   }
 
-  toTicketDetailDto(
-    ticket: TicketModel,
-    assignee: any,
-  ): TicketDetailResponseDto {
+  toTicketListDto(ticket: TicketModel, assignee: any): TicketDetailResponseDto {
     return {
       id: ticket.id,
       title: ticket.title,
@@ -183,9 +185,45 @@ export class TicketService {
       status: ticket.status.title,
       point: ticket.point,
       userId: ticket.userId,
-      assignee: this.toAssigneeUserDto(assignee),
-      ticketHistories: ticket.ticketHistories,
+      assignee: assignee ? this.toAssigneeUserDto(assignee) : ticket.assigneeId,
     };
+  }
+
+  async toTicketDetailDto(
+    ticket: TicketModel,
+    assignee: any,
+  ): Promise<TicketDetailResponseDto> {
+    return {
+      id: ticket.id,
+      title: ticket.title,
+      description: ticket.description,
+      status: ticket.status.title,
+      point: ticket.point,
+      userId: ticket.userId,
+      assignee: assignee ? this.toAssigneeUserDto(assignee) : ticket.userId,
+      ticketHistories: await this.toTicketHistoriesDto(ticket.ticketHistories),
+    };
+  }
+
+  async toTicketHistoriesDto(
+    historyTickets: TicketHistoryModel[],
+  ): Promise<TicketHistoryDto[]> {
+    const histories: TicketHistoryDto[] = [];
+    for (const history of historyTickets) {
+      let user = null;
+      if (history.user) {
+        const userData = await this.userService.getDetailUser(history.user);
+        user = userData.name;
+      }
+      const historyDetail = {
+        id: history.id,
+        date: history.date,
+        title: history.title,
+        user,
+      };
+      histories.push(historyDetail);
+    }
+    return histories;
   }
 
   toAssigneeUserDto(assignee: any): AssigneeUserTicketDetailDto {
@@ -255,7 +293,7 @@ export class TicketService {
 
     for (const ticket of tickets.items) {
       const assignee = await this.userService.getDetailUser(ticket.assigneeId);
-      const item = this.toTicketDetailDto(ticket, assignee);
+      const item = this.toTicketListDto(ticket, assignee);
       items.push(item);
     }
 
