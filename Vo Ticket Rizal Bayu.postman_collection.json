@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "72f6ba31-0b5f-4390-ad68-458b12aad4c9",
+		"name": "Vo Ticket Rizal Bayu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11052853"
+	},
+	"item": [
+		{
+			"name": "User Service",
+			"item": [
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-user}}v1/users?size=10&page=1",
+							"host": [
+								"{{local-user}}v1"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-user}}v1/users/:userId",
+							"host": [
+								"{{local-user}}v1"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "fb8ad279-606b-47bb-a7ca-ce20524c3664"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"rizal\",\r\n    \"email\":\"rizal2@gmail.com\",\r\n    \"profilePicture\":\"google.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-user}}v1/users",
+							"host": [
+								"{{local-user}}v1"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ticket Service",
+			"item": [
+				{
+					"name": "Add Ticket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"create user\",\r\n  \"description\": \"create new user for admin\",\r\n  \"point\": 3,\r\n  \"userId\": \"6697700d-239c-42b0-b08e-95b6e4f0e843\",\r\n  \"assigneeId\": \"6697700d-239c-42b0-b08e-95b6e4f0e843\",\r\n  \"statusId\" :\"62ab3f45-6bc1-4216-8425-c69c2d363a8a\",\r\n  \"changerId\":\"604bbdf5-c6b4-473e-90bf-64ab9c5735b5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Ticket",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"create login page\",\r\n  \"description\": \"create login form\",\r\n  \"point\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/:id",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9c5441a3-2c93-4f28-90cd-fce754ed03ab"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Ticket Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"statusId\": \"d09d2fb0-6525-4c9b-b46b-cca69323f21f\",\r\n  \"changerId\":\"604bbdf5-c6b4-473e-90bf-64ab9c5735b5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/:id/status",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								":id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fa557a31-ada4-4afe-8f1c-492cd45a4f25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Ticket User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"fb8ad279-606b-47bb-a7ca-ce20524c3664\",\r\n  \"type\": \"assignee\",\r\n  \"changerId\":\"604bbdf5-c6b4-473e-90bf-64ab9c5735b5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/:id/user",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								":id",
+								"user"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "096b7b78-5d74-45d5-8f92-de5d2d0b2a93"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Ticket",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Ticket Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ticket Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/:ticketId?userId=6697700d-239c-42b0-b08e-95b6e4f0e843",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								":ticketId"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "6697700d-239c-42b0-b08e-95b6e4f0e843"
+								}
+							],
+							"variable": [
+								{
+									"key": "ticketId",
+									"value": "9c5441a3-2c93-4f28-90cd-fce754ed03ab"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Assignee Summary Ticket",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/summary/:assigneeId",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								"summary",
+								":assigneeId"
+							],
+							"variable": [
+								{
+									"key": "assigneeId",
+									"value": "6697700d-239c-42b0-b08e-95b6e4f0e843"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Assignee Performance Wee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-ticket}}v1/tickets/summary/:assigneeId",
+							"host": [
+								"{{local-ticket}}v1"
+							],
+							"path": [
+								"tickets",
+								"summary",
+								":assigneeId"
+							],
+							"variable": [
+								{
+									"key": "assigneeId",
+									"value": "6697700d-239c-42b0-b08e-95b6e4f0e843"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local-user",
+			"value": "localhost:3000/",
+			"type": "string"
+		},
+		{
+			"key": "local-ticket",
+			"value": "localhost:3001/",
+			"type": "string"
+		}
+	]
+}
