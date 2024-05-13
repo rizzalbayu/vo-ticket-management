@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   TicketHistoryModel,
   TicketModel,
@@ -26,6 +26,7 @@ import {
   TicketPerformanceResponseDto,
   TicketSummaryResponseDto,
 } from '../dtos/ticket-response.dto';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class TicketService {
@@ -33,6 +34,8 @@ export class TicketService {
     private readonly ticketRepository: TicketRepository,
     private readonly ticketStatusRepository: TicketStatusRepository,
     private readonly userService: UserManagementService,
+    @Inject('TICKET_SERVICE')
+    private readonly rabbitClient: ClientProxy,
   ) {}
 
   async getAllTicket(
@@ -75,10 +78,12 @@ export class TicketService {
     const changerUser = await this.userService.getDetailUser(
       ticketCreateRequest.changerId,
     );
-    return await this.ticketRepository.createTicket(
+    const ticket = await this.ticketRepository.createTicket(
       ticketCreateRequest,
       changerUser,
     );
+    this.rabbitClient.emit('ticket_update', ticket);
+    return ticket;
   }
 
   async editTicket(
@@ -89,11 +94,14 @@ export class TicketService {
     const changerUser = await this.userService.getDetailUser(
       ticketUpdateRequest.changerId,
     );
-    return await this.ticketRepository.editTicket(
+    const ticket = await this.ticketRepository.editTicket(
       ticketUpdateRequest,
       ticketId,
       changerUser,
     );
+
+    this.rabbitClient.emit('ticket_update', ticket);
+    return ticket;
   }
 
   async editStatusTicket(
@@ -113,12 +121,15 @@ export class TicketService {
     const changerUser = await this.userService.getDetailUser(
       ticketUpdateRequest.changerId,
     );
-    return await this.ticketRepository.editStatusTicket(
+    const ticket = await this.ticketRepository.editStatusTicket(
       ticketUpdateRequest,
       ticketId,
       ticketStatus,
       changerUser,
     );
+
+    this.rabbitClient.emit('ticket_update', ticket);
+    return ticket;
   }
 
   async editUserTicket(
@@ -129,11 +140,14 @@ export class TicketService {
     const changerUser = await this.userService.getDetailUser(
       ticketUpdateRequest.changerId,
     );
-    return await this.ticketRepository.editUserTicket(
+    const ticket = await this.ticketRepository.editUserTicket(
       ticketUpdateRequest,
       ticketId,
       changerUser,
     );
+
+    this.rabbitClient.emit('ticket_update', ticket);
+    return ticket;
   }
 
   async getSummaryAssignee(
